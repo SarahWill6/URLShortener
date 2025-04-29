@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Stats - URLShortener</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>URL Statistics</h1>
+        <div class="input-section">
+            <input type="text" id="shortCodeInput" placeholder="Enter short code (e.g., abc123)">
+            <button onclick="getStats()">Get Stats</button>
+        </div>
+        
+        <div id="statsResult" class="result-section" style="display: none;">
+            <h3>Statistics</h3>
+            <div id="statsContent"></div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/" style="color: #667eea; text-decoration: none;">← Back to URL Shortener</a>
+        </div>
+    </div>
+    
+    <script>
+        async function getStats() {
+            const shortCodeInput = document.getElementById('shortCodeInput');
+            const statsResult = document.getElementById('statsResult');
+            const statsContent = document.getElementById('statsContent');
+            
+            const shortCode = shortCodeInput.value.trim();
+            
+            if (!shortCode) {
+                alert('Please enter a short code');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/stats/${shortCode}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    statsContent.innerHTML = `
+                        <div style="background: white; padding: 20px; border-radius: 8px;">
+                            <p><strong>Original URL:</strong> <a href="${data.originalUrl}" target="_blank" style="color: #667eea;">${data.originalUrl}</a></p>
+                            <p><strong>Short Code:</strong> ${data.shortCode}</p>
+                            <p><strong>Total Clicks:</strong> ${data.clicks}</p>
+                            <p><strong>Created:</strong> ${new Date(data.createdAt).toLocaleString()}</p>
+                        </div>
+                    `;
+                    statsResult.style.display = 'block';
+                } else {
+                    alert(data.error || 'Stats not found');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+                console.error('Error:', error);
+            }
+        }
+        
+        document.getElementById('shortCodeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                getStats();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -65,7 +65,15 @@ app.get('/:shortCode', (req, res) => {
     const urlData = urlDatabase[shortCode];
     
     if (!urlData) {
-        return res.status(404).json({ error: 'URL not found' });
+        return res.status(404).send(`
+            <html>
+                <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+                    <h1>404 - URL Not Found</h1>
+                    <p>The shortened URL you're looking for doesn't exist.</p>
+                    <a href="/" style="color: #667eea; text-decoration: none;">← Go back to URL Shortener</a>
+                </body>
+            </html>
+        `);
     }
     
     // Increment click count
