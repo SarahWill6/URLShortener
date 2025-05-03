@@ -5,6 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
 // Middleware
 app.use(bodyParser.json());
@@ -50,7 +51,7 @@ app.post('/api/shorten', (req, res) => {
     
     urlStats[shortCode] = { clicks: 0 };
     
-    const shortUrl = `${req.protocol}://${req.get('host')}/${shortCode}`;
+    const shortUrl = `${BASE_URL}/${shortCode}`;
     
     res.json({
         originalUrl,

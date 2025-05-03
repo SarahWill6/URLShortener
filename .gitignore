@@ -1,6 +1,9 @@
 .claude
+*.log
 node_modules/
 CLAUDE.md
-*.log
+.env
 .DS_Store
+npm-debug.log*
 dist/
+.vscode/
